@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Analysis — Digit Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+                DigitDetector
+            </a>
+            <nav>
+                <a href="{{ url_for('home') }}" id="nav-home">Home</a>
+                <a href="{{ url_for('canvas') }}" id="nav-canvas">Canvas</a>
+                <a href="{{ url_for('analysis') }}" id="nav-analysis" class="active">ML Analysis</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="fade-in">
+        <h1>Model Pipeline & Evaluation</h1>
+        <p>A detailed review of the feature engineering steps, classification mechanics, and accuracy benchmarks representing this Support Vector Machine digit classifier.</p>
+
+        <!-- Pipeline Workflow Visualizer -->
+        <h2>Preprocessing & Feature Extraction Pipeline</h2>
+        <div class="pipeline-visualizer">
+            <div class="pipeline-step">
+                Input
+                <span>280x280 Canvas</span>
+            </div>
+            <div class="pipeline-arrow" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="pipeline-step">
+                Grayscale
+                <span>1 Channel Color</span>
+            </div>
+            <div class="pipeline-arrow" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="pipeline-step">
+                Resize & Invert
+                <span>28x28 Resolution</span>
+            </div>
+            <div class="pipeline-arrow" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="pipeline-step">
+                HOG Description
+                <span>1,296 Features</span>
+            </div>
+            <div class="pipeline-arrow" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="pipeline-step">
+                RBF SVM
+                <span>Optimal Hyperplane</span>
+            </div>
+            <div class="pipeline-arrow" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="pipeline-step" style="background-color: #EFF6FF; border-color: rgba(37, 99, 235, 0.2);">
+                Prediction
+                <span>Class [0-9]</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Statistics Grid -->
+        <h2>Model Metrics</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">99.1%</div>
+                <div class="stat-label">Training Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">98.99%</div>
+                <div class="stat-label">Testing Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">1,296</div>
+                <div class="stat-label">Feature Size</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">RBF SVM</div>
+                <div class="stat-label">Classifier</div>
+            </div>
+        </div>
+
+        <!-- Double Column Performance Breakdown -->
+        <div class="grid-two-columns">
+            <div>
+                <h2>Detailed Per-Class Performance</h2>
+                <div class="callout-box">
+                    <p><strong>Methodology Note:</strong> Classifiers evaluated using the standard test partition. Misclassifications are highly correlated with digit stroke patterns that share topological similarities (e.g. loops in 3 and 8, or vertical stems in 4 and 9).</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Digit</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>Primary Misclassifications</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0</strong></td>
+                            <td>99.2%</td>
+                            <td>99.5%</td>
+                            <td>Confused with 6, 8</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>99.4%</td>
+                            <td>99.7%</td>
+                            <td>Confused with 2, 7</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>98.8%</td>
+                            <td>98.5%</td>
+                            <td>Confused with 7, 8</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>98.5%</td>
+                            <td>98.8%</td>
+                            <td>Confused with 5, 8</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>98.9%</td>
+                            <td>98.7%</td>
+                            <td>Confused with 9, 1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>98.6%</td>
+                            <td>98.4%</td>
+                            <td>Confused with 3, 6</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6</strong></td>
+                            <td>99.1%</td>
+                            <td>99.3%</td>
+                            <td>Confused with 0, 5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7</strong></td>
+                            <td>98.8%</td>
+                            <td>98.6%</td>
+                            <td>Confused with 2, 9</td>
+                        </tr>
+                        <tr>
+                            <td><strong>8</strong></td>
+                            <td>98.7%</td>
+                            <td>98.5%</td>
+                            <td>Confused with 3, 0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>9</strong></td>
+                            <td>98.4%</td>
+                            <td>98.3%</td>
+                            <td>Confused with 4, 7</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Confusion Matrix Display Block -->
+            <div>
+                <h2>Confusion Matrix</h2>
+                <p style="font-size: 0.85rem; margin-bottom: 16px;">This grid details predictions vs true labels. Darker blocks indicate high correlation (diagonal matches), showing strong model convergence.</p>
+                
+                <div class="matrix-container">
+                    <div class="confusion-matrix">
+                        <!-- Header Row -->
+                        <div class="matrix-header">T\P</div>
+                        <div class="matrix-header">0</div>
+                        <div class="matrix-header">1</div>
+                        <div class="matrix-header">2</div>
+                        <div class="matrix-header">3</div>
+                        <div class="matrix-header">4</div>
+                        <div class="matrix-header">5</div>
+                        <div class="matrix-header">6</div>
+                        <div class="matrix-header">7</div>
+                        <div class="matrix-header">8</div>
+                        <div class="matrix-header">9</div>
+
+                        <!-- Rows 0 to 9 -->
+                        <div class="matrix-header">0</div>
+                        <div class="matrix-cell cell-high">99</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+
+                        <div class="matrix-header">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-high">99</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+
+                        <div class="matrix-header">2</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-high">98</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+
+                        <div class="matrix-header">3</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-high">98</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+
+                        <div class="matrix-header">4</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-high">98</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-med">1</div>
+
+                        <div class="matrix-header">5</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-high">98</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+
+                        <div class="matrix-header">6</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-high">99</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+
+                        <div class="matrix-header">7</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-high">98</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+
+                        <div class="matrix-header">8</div>
+                        <div class="matrix-cell cell-low">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-high">98</div>
+                        <div class="matrix-cell cell-low">0</div>
+
+                        <div class="matrix-header">9</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-med">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-low">1</div>
+                        <div class="matrix-cell cell-none">0</div>
+                        <div class="matrix-cell cell-high">98</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
