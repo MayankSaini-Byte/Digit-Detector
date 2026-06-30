@@ -108,10 +108,17 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({ image: base64Image })
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error("HTTP error: " + response.status);
-            }
-            return response.json();
+            return response.json().then(data => {
+                if (!response.ok) {
+                    throw new Error(data.error || "Prediction request failed");
+                }
+                return data;
+            }).catch(err => {
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                throw err;
+            });
         })
         .then(data => {
             loader.classList.remove("active");
@@ -132,14 +139,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             } else if (data.error) {
                 digitOut.textContent = "?";
-                percentOut.textContent = "Error";
+                percentOut.textContent = data.error;
                 console.error("Classifier error:", data.error);
             }
         })
         .catch(error => {
             loader.classList.remove("active");
             digitOut.textContent = "?";
-            percentOut.textContent = "Error";
+            percentOut.textContent = error.message || "Error";
             console.error("Fetch request error:", error);
         });
     });

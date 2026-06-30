@@ -11,9 +11,10 @@ from skimage.feature import hog
 app = Flask(__name__)
 
 # Load SVM Model and HOG parameters
-# Assuming paths relative to project root
-MODEL_PATH = os.path.join("models", "svm_digit_model.pkl")
-HOG_PATH = os.path.join("models", "hog_params.pkl")
+# Using absolute paths relative to app.py location
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "models", "svm_digit_model.pkl")
+HOG_PATH = os.path.join(BASE_DIR, "models", "hog_params.pkl")
 
 print("Loading SVM model and HOG parameters...")
 try:
