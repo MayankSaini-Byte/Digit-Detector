@@ -10,3 +10,6 @@ venv/
 env/
 .idea/
 .vscode/
+
+# Ignore large uncompressed models
+models/svm_digit_model.pkl
