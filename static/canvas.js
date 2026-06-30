@@ -108,17 +108,14 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({ image: base64Image })
         })
         .then(response => {
-            return response.json().then(data => {
-                if (!response.ok) {
-                    throw new Error(data.error || "Prediction request failed");
-                }
-                return data;
-            }).catch(err => {
-                if (!response.ok) {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || "HTTP error " + response.status);
+                }).catch(() => {
                     throw new Error("HTTP error " + response.status);
-                }
-                throw err;
-            });
+                });
+            }
+            return response.json();
         })
         .then(data => {
             loader.classList.remove("active");
