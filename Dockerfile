@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # Hugging Face Spaces specific environment variables
 ENV HOME=/home/user \
