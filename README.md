@@ -1,3 +1,11 @@
+---
+title: Digit Detector
+emoji: 🔢
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
 # Digit Detector — Classical Machine Learning
 
 A polished, modern handwritten digit recognition web application powered by **Histogram of Oriented Gradients (HOG)** feature extraction and a **Support Vector Machine (SVM)** classifier. 
